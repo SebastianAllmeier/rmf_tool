@@ -35,13 +35,16 @@ def generate_data():
         pickle.dump(data, f, pickle.HIGHEST_PROTOCOL)
 
 def approximately_equal(new_data, old_data):
+    """
+    (doc to be written)
+    """
     absolute_difference = 0
-    for i in [0,1] if len(new_data)==3 else [0,1,2]:
+    for i in [0, 1] if len(new_data)==3 else [0,1,2]:
         new = np.array(new_data[i])
         old = np.array(old_data[i])
         absolute_difference += np.sum(np.abs(new-old))
     return absolute_difference
-    
+
 def test_two_choice():
     with open('output_tests/d_choice.pickle', 'rb') as f:
         # The protocol version used is detected automatically, so we do not
