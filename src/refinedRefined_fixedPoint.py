@@ -30,7 +30,7 @@ def computeD(Fp,Q,W):
          +kron(kron(kron(Id,Fp),Id),Id)
          +kron(kron(kron(Id,Id),Fp),Id)
          +kron(kron(kron(Id,Id),Id),Fp))
-    Dvec = sparse.linalg.lgmres(M,-6*QWvec)
+    Dvec = sparse.linalg.lgmres(M,-6*QWvec, atol=1e-7)
     return(Dvec[0].reshape((n,n,n,n)))
 
 def computeC(Fp,Fpp,Q,Qp,R,D,W,V):
@@ -45,7 +45,7 @@ def computeC(Fp,Fpp,Q,Qp,R,D,W,V):
                           + kron(kron(Id,Fp),Id)
                           + kron(kron(Id,Id),Fp) )
     b = (- (3*FppD/2+3*QV+3*QpW+R)).reshape( (n**3))
-    Cvec = sparse.linalg.lgmres(M, b )
+    Cvec = sparse.linalg.lgmres(M, b, atol=1e-7 )
     return( Cvec[0].reshape((n,n,n)) )
 
 def computeB(Fp,Fpp,Fppp,Qp,Qpp,V,W,D,C):
