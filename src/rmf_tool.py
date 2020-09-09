@@ -67,11 +67,14 @@ class DDPP():
     DDPP serves to define and study density depend population processes
     """
 
-    def __init__(self):
+    def __init__(self, use_autograd=False):
         """
         Initialize an empty density dependent population process (without any transitions)
 
         Args:
+            use_autograd (bool, optional): When True, the jacobian and hessian are computed
+                by using autograd and not symbolic differentiation. This allows for more general 
+                rate functions but is slower. Default=False
             param1 (str): Description of `param1`.
             param2 (:obj:`int`, optional): Description of `param2`. Multiple
                 lines are supported.
@@ -80,6 +83,7 @@ class DDPP():
         self._list_of_rate_functions = []
         self._x0 = None
         self._model_dimension = None
+        self._use_autograd = use_autograd
 
     def add_transition(self, l, f):
         r"""
@@ -306,11 +310,43 @@ class DDPP():
         def computeF(x): return(np.array(F(x)))
         return computeF
 
+    def defineDriftDerivativeQ_autograd(self, evaluate_at=None):
+        """
+        version of defineDriftDerivativeQ that uses 'autograd'
+        """
+        import autograd
+        import autograd.numpy as npa
+
+        n = len(self._list_of_transitions[0])
+        number_of_transitions = len(self._list_of_transitions)
+        def drift(x):
+            f = npa.zeros(n)
+            for l in range(number_of_transitions):
+                f = f + self._list_of_transitions[l] * \
+                    self._list_of_rate_functions[l](x)
+            return f
+        jacobian = autograd.jacobian(drift)
+        hessian = autograd.hessian(drift)
+        def Q(x):
+            myQ = np.zeros((n**2))
+            for l in range(number_of_transitions):
+                myQ += np.kron(self._list_of_transitions[l], self._list_of_transitions[l]
+                               )*self._list_of_rate_functions[l](x)
+            return myQ.reshape((n,n))
+        if evaluate_at is not None:
+            x = npa.array(evaluate_at)
+            return jacobian(x), hessian(x), Q(x)
+        else:
+            return jacobian, hessian, Q
+
     def defineDriftDerivativeQ(self, evaluate_at=None):
         """Return three (lambdified) functions Fp(.), Fpp(.) and Q(.) that are the first two derivatives of the drift and the matrix Q. 
 
         Arg : evaluate_at=None : if not None, return the value of the functions evaluated at point "evaluate_at".
         """
+        if self._use_autograd:
+            return self.defineDriftDerivativeQ_autograd(evaluate_at=evaluate_at)
+        
         n = len(self._list_of_transitions[0])
         number_of_transitions = len(self._list_of_transitions)
         x = [sym.symbols('x[{}]'.format(i)) for i in range(n)]
