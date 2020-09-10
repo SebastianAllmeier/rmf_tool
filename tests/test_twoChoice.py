@@ -5,6 +5,8 @@ Compare the computed value with a value already stored in a pickle file
 """
 import pickle
 import numpy as np
+import sys
+sys.path.append('..')
 import src.rmf_tool as rmf
 
 def dChoiceModel(K, rho, d):

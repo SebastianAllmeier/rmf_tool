@@ -1,6 +1,11 @@
+"""
+Basic tests to see if the derivatives are computed correctely
+"""
+import pickle
+import sys
+sys.path.append('..')
 import src.rmf_tool as rmf
 import numpy as np
-import pickle
 
 def sir_model():
     """
@@ -58,7 +63,7 @@ def test_drift_derivatives():
             print(x0, 'OK')
             new_data = function(model, np.array(x0))
             test_data = data[x0]
-            assert(absolute_difference(new_data, test_data) <= 1e-8)
+            assert absolute_difference(new_data, test_data) <= 1e-8
 
 #generate_data()
 #test_drift_derivatives()

@@ -1,3 +1,11 @@
+"""
+Test for the transient regime:
+- we compute a trajectory up to time 3 (from a random initial condition)
+- we test if the obtain value (at time 3) is equal to the stored value.
+"""
+
+import sys
+sys.path.append('..')
 import src.rmf_tool as rmf
 import numpy as np
 from test_drift_derivatives import absolute_difference
