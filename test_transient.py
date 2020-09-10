@@ -13,7 +13,7 @@ def sir_model():
     ddpp.add_transition([1, 0, -1], lambda x: 3*x[2]**3)
     return ddpp
 
-def to_be_tested(model, x0):
+def function(model, x0):
     """
     datas to be tested (from the model)
     """
@@ -22,7 +22,7 @@ def to_be_tested(model, x0):
     _,X1,V1,_ = model.meanFieldExpansionTransient(order=1, time=3)
     _,X2,V2,A2,_ = model.meanFieldExpansionTransient(order=2, time=3)
     values = [X[-1], X1[-1], X2[-1], V1[-1], V2[-1]]
-    return [array for mytuple in values for array in mytuple ]
+    return [array for mytuple in values for array in mytuple]
 
 def generate_data():
     """
@@ -33,7 +33,7 @@ def generate_data():
     for i in range(10):
         x0 = np.random.rand(3)
         x0 = x0/sum(x0)
-        data[tuple(x0)] = to_be_tested(model, x0)
+        data[tuple(x0)] = function(model, x0)
         print(x0)
     with open('output_tests/test_transient.pickle', 'wb') as f:
         # Pickle the 'data' dictionary using the highest protocol available.
@@ -47,7 +47,7 @@ def test_transient():
     with open('output_tests/test_transient.pickle', 'rb') as f:
         data = pickle.load(f)
         for x0 in data:
-            new_data = to_be_tested(model, np.array(x0))
+            new_data = function(model, np.array(x0))
             test_data = data[x0]
             assert absolute_difference(new_data, test_data) <= 1e-4
 

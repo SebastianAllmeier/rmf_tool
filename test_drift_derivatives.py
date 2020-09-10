@@ -13,12 +13,12 @@ def sir_model():
     ddpp.set_initial_state([.3,.2,.5]) # We first need to define an initial stater
     return ddpp
 
-def to_be_tested(model, x0):
+def function(model, x0):
     """
     datas to be tested (from the model)
     """
     values = [model.defineDriftDerivativeQ(evaluate_at=x0),
-            model.defineDriftSecondDerivativeQderivativesR(evaluate_at=x0)]
+              model.defineDriftSecondDerivativeQderivativesR(evaluate_at=x0)]
     return [array for mytuple in values for array in mytuple ]
 
 def absolute_difference(new_data, old_data):
@@ -41,7 +41,7 @@ def generate_data():
     for i in range(10):
         x0 = np.random.rand(3)
         x0 = x0/sum(x0)
-        data[tuple(x0)] = to_be_tested(model, x0)
+        data[tuple(x0)] = function(model, x0)
         print(x0)
     with open('output_tests/drift_derivatives.pickle', 'wb') as f:
         # Pickle the 'data' dictionary using the highest protocol available.
@@ -56,7 +56,7 @@ def test_drift_derivatives():
         data = pickle.load(f)
         for x0 in data:
             print(x0, 'OK')
-            new_data = to_be_tested(model, np.array(x0))
+            new_data = function(model, np.array(x0))
             test_data = data[x0]
             assert(absolute_difference(new_data, test_data) <= 1e-8)
 
