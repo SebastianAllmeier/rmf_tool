@@ -312,21 +312,24 @@ class DDPP():
 
     def defineDriftDerivativeQ_autograd(self, evaluate_at=None):
         """
-        version of defineDriftDerivativeQ that uses 'autograd'
+        version of defineDriftDerivativeQ that uses 'JAX (successor of autograd)'
         """
-        import autograd
-        import autograd.numpy as npa
+        import jax.numpy as jnp
+        import jax
+        from jax.config import config
+        config.update("jax_enable_x64", True) # we need to use double-float precision
+        # (this could be used with single-precision but it is less accurate)
 
         n = len(self._list_of_transitions[0])
         number_of_transitions = len(self._list_of_transitions)
         def drift(x):
-            f = npa.zeros(n)
+            f = jnp.zeros(n)
             for l in range(number_of_transitions):
                 f = f + self._list_of_transitions[l] * \
                     self._list_of_rate_functions[l](x)
             return f
-        jacobian = autograd.jacobian(drift)
-        hessian = autograd.hessian(drift)
+        jacobian = jax.jacobian(drift)
+        hessian = jax.hessian(drift)
         def Q(x):
             myQ = np.zeros((n**2))
             for l in range(number_of_transitions):
@@ -334,10 +337,11 @@ class DDPP():
                                )*self._list_of_rate_functions[l](x)
             return myQ.reshape((n,n))
         if evaluate_at is not None:
-            x = npa.array(evaluate_at)
+            x = jnp.array(evaluate_at)
             return jacobian(x), hessian(x), Q(x)
         else:
-            return jacobian, hessian, Q
+            return jax.jit(jacobian), jax.jit(hessian), jax.jit(Q)
+
 
     def defineDriftDerivativeQ(self, evaluate_at=None):
         """Return three (lambdified) functions Fp(.), Fpp(.) and Q(.) that are the first two derivatives of the drift and the matrix Q. 
