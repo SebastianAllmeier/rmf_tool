@@ -6,10 +6,18 @@ Test for the transient regime:
 
 import sys
 sys.path.append('..')
+sys.path.append('.')
 import src.rmf_tool as rmf
 import numpy as np
 from test_drift_derivatives import absolute_difference
 import pickle
+
+import os
+PWD=os.getcwd()
+if PWD[-5:] == 'tests':
+    CACHE_DIR = 'output_tests'
+else:
+    CACHE_DIR = 'tests/output_tests'
 
 def sir_model():
     """
@@ -43,7 +51,7 @@ def generate_data():
         x0 = x0/sum(x0)
         data[tuple(x0)] = function(model, x0)
         print(x0)
-    with open('output_tests/test_transient.pickle', 'wb') as f:
+    with open('{}/test_transient.pickle'.format(CACHE_DIR), 'wb') as f:
         # Pickle the 'data' dictionary using the highest protocol available.
         pickle.dump(data, f, pickle.HIGHEST_PROTOCOL)
 
@@ -52,7 +60,7 @@ def test_transient():
     Test if derivatives are correct
     """
     model = sir_model()
-    with open('output_tests/test_transient.pickle', 'rb') as f:
+    with open('{}/test_transient.pickle'.format(CACHE_DIR), 'rb') as f:
         data = pickle.load(f)
         for x0 in data:
             new_data = function(model, np.array(x0))

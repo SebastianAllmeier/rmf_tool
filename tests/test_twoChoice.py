@@ -5,8 +5,18 @@ Compare the computed value with a value already stored in a pickle file
 """
 import pickle
 import numpy as np
+
+
+import os
+PWD=os.getcwd()
+if PWD[-5:] == 'tests':
+    CACHE_DIR = 'output_tests'
+else:
+    CACHE_DIR = 'tests/output_tests'
+
 import sys
-sys.path.append('..')
+sys.path.append('../')
+sys.path.append('.')
 import src.rmf_tool as rmf
 
 def dChoiceModel(K, rho, d):
@@ -41,7 +51,7 @@ def generate_data():
                 for order in ([1, 2] if K <= 5 else [1]):
                     ddpp = dChoiceModel(K, rho, d)
                     data[(K, rho, d, order)] = ddpp.meanFieldExpansionSteadyState(order=order)
-    with open('output_tests/d_choice.pickle', 'wb') as f:
+    with open('{}/d_choice.pickle'.format(CACHE_DIR), 'wb') as f:
         # Pickle the 'data' dictionary using the highest protocol available.
         pickle.dump(data, f, pickle.HIGHEST_PROTOCOL)
 
@@ -58,7 +68,7 @@ def approximately_equal(new_data, old_data):
     return absolute_difference
 
 def test_two_choice():
-    with open('output_tests/d_choice.pickle', 'rb') as f:
+    with open('{}/d_choice.pickle'.format(CACHE_DIR), 'rb') as f:
         # The protocol version used is detected automatically, so we do not
         # have to specify it.
         data = pickle.load(f)
