@@ -5,6 +5,7 @@ Compare the computed value with a value already stored in a pickle file
 """
 import pickle
 import numpy as np
+from approximately_equal import approximately_equal
 
 
 import os
@@ -55,19 +56,10 @@ def generate_data():
         # Pickle the 'data' dictionary using the highest protocol available.
         pickle.dump(data, f, pickle.HIGHEST_PROTOCOL)
 
-def approximately_equal(new_data, old_data):
-    """
-    (doc to be written)
-    """
-    absolute_difference = 0
-    for i in [0, 1] if len(new_data) == 3 else [0, 1, 2]:
-        new = np.array(new_data[i])
-        old = np.array(old_data[i])
-        absolute_difference += np.sum(np.abs(new-old))/np.sum(np.abs(new)+np.abs(old))
-    print(absolute_difference)
-    return absolute_difference
-
 def test_two_choice():
+    """
+    Compare the new data with previously computed data.
+    """
     with open('{}/d_choice.pickle'.format(CACHE_DIR), 'rb') as f:
         # The protocol version used is detected automatically, so we do not
         # have to specify it.
