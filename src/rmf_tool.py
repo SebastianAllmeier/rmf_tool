@@ -217,19 +217,9 @@ class DDPP():
             print("The Jacobian seems to be not Hurwitz")
         if rank_of_jacobian == n:
             return(np.eye(n), np.eye(n), n)
-        C = np.zeros((n, n))
-        n = len(A)
-        d = 0
-        rank_of_previous_submatrix = 0
-        for i in range(n):
-            rank_of_next_submatrix = np.linalg.matrix_rank(A[0:i+1, 0:i+1])
-            if rank_of_next_submatrix > rank_of_previous_submatrix:
-                C[d, i] = 1
-                d += 1
-            rank_of_previous_submatrix = rank_of_next_submatrix
-        U, s, V = scipy.linalg.svd(A)
-        C[rank_of_jacobian:, :] = U.transpose()[rank_of_jacobian:, :]
-        return(C, scipy.linalg.inv(C), rank_of_jacobian)
+        U, _, _ = scipy.linalg.svd(A)
+        return U.transpose(), U, rank_of_jacobian
+
 
     def test_for_linear_dependencies(self):
         """This function tests if there the transition conserve some subset of the space.
