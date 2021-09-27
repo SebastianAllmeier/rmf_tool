@@ -25,8 +25,8 @@ PATH = os.path.abspath(__file__)
 DIR_PATH = os.path.dirname(PATH)
 sys.path.append(DIR_PATH)
 
-from src.refinedRefined_fixedPoint import computePiV, computePiVA
-from src.refinedRefined_transientRegime import drift_r_vector, drift_rr_vector
+from refinedRefined_fixedPoint import computePiV, computePiVA
+from refinedRefined_transientRegime import drift_r_vector, drift_rr_vector
 
 # To compute the transient trajectories and fixed points
 
