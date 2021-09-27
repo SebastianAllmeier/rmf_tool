@@ -88,7 +88,7 @@ class HetPP(DDPP):
 
         def transition_rates(x):
 
-            _trans_rates_A = np.zeros(shape=(trans_indices_A[0].shape))
+            _trans_rates_A = np.zeros(shape=trans_indices_A[0].shape)
 
             for i in range(nr_trans_A):
                 k, s, s_prime = trans_indices_A[0][i], trans_indices_A[1][i], trans_indices_A[2][i]
