@@ -10,9 +10,9 @@ sys.path.append(DIR_PATH)
 # from rmf_tool.src.het_refinedRefined_transientRegime import drift_r_vector
 
 
-from src.rmf_tool import DDPP
-from src.rmf_tool import DimensionError, NotImplemented, InitialConditionNotDefined, NegativeRate
-from src.het_refinedRefined_transientRegime import drift_r_vector
+from rmf_tool import DDPP
+from rmf_tool import DimensionError, NotImplemented, InitialConditionNotDefined, NegativeRate
+from het_refinedRefined_transientRegime import drift_r_vector
 
 import numpy as np
 

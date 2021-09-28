@@ -16,6 +16,8 @@ import numpy.linalg
 import matplotlib.pyplot as plt
 import time as ti
 
+import copy
+
 from numpy import tensordot as tsdot
 from sympy.utilities.lambdify import lambdify
 from sympy import derive_by_array
@@ -713,6 +715,8 @@ class DDPP():
         plt.ylabel('x_{i}')
         plt.show()
 
+
+
 class HomPP(DDPP):
     def __init__(self):
         super().__init__()
@@ -731,25 +735,31 @@ class HomPP(DDPP):
         self.pairwise_transitions = pairwise_transitions
 
         trans_indices_unilateral = np.nonzero(self.unilateral_transition)
-        nr_pair_trans_unilateral = trans_indices_unilateral[0].shape[0]
+        nr_unilateral_trans = trans_indices_unilateral[0].shape[0]
 
         # add unilateral transitions
-        for i in range(nr_pair_trans_unilateral):
+        for i in range(nr_unilateral_trans):
             s, s_prime = trans_indices_unilateral[0][i], trans_indices_unilateral[1][i]
             _transition_vector = - self.e(s) + self.e(s_prime)
-            _transition_rate = lambda x: self.unilateral_transition[s, s_prime] * x[s]
+            # _transition_rate = lambda x: self.unilateral_transition[s, s_prime] * x[s]
+            _transition_rate = eval(
+                'lambda x: {} * x[{}]'.format(self.unilateral_transition[s, s_prime], s)
+            )
             self.add_transition(_transition_vector, _transition_rate)
 
-        trans_indices_pairwise = np.nonzero(self.B)
-        nr_pair_trans_wise = trans_indices_pairwise[0].shape[0]
+        trans_indices_pairwise = np.nonzero(self.pairwise_transitions)
+        nr_pair_trans = trans_indices_pairwise[0].shape[0]
 
         # add pairwise transitions
-        for i in range(nr_pair_trans_wise):
+        for i in range(nr_pair_trans):
             s, s1 = trans_indices_pairwise[0][i], trans_indices_pairwise[1][i]
             s_prime, s1_prime = trans_indices_pairwise[2][i], trans_indices_pairwise[3][i]
-            _transition_vector  = - self.e(s) + self.e(s_prime) - self.e(s1) + self.e(s1_prime)
-            _transition_rate = lambda x: self.pairwise_transitions[s, s1, s_prime, s1_prime] * x[s] * x[s1]
-            self.add_transition(_transision_vector, _transition_rate)
+            _transition_vector = - self.e(s) + self.e(s_prime) - self.e(s1) + self.e(s1_prime)
+            _transition_rate = eval('lambda x: {} * x[{}] * x[{}]'.format(
+                self.pairwise_transitions[s, s1, s_prime, s1_prime], s, s1)
+            )
+            # _transition_rate = lambda x: self.pairwise_transitions[s, s1, s_prime, s1_prime] * x[s] * x[s1]
+            self.add_transition(_transition_vector, copy.deepcopy(_transition_rate))
 
     def e(self, s):
         _e = np.zeros(shape=self.unilateral_transition.shape[0])
