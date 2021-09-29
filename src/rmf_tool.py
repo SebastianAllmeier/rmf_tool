@@ -716,7 +716,6 @@ class DDPP():
         plt.show()
 
 
-
 class HomPP(DDPP):
     def __init__(self):
         super().__init__()
@@ -765,5 +764,3 @@ class HomPP(DDPP):
         _e = np.zeros(shape=self.unilateral_transition.shape[0])
         _e[s] = 1
         return _e
-
-
