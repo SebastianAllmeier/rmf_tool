@@ -5,26 +5,24 @@ This python librarie implements an algorithm to simulate and study a
 density dependent population process, to compute its mean-field
 approximation and its refined mean-field approximation.
 
-In particular, it provides a numerical algorithm to compute the constant of the "refined mean field approximation" provided in the paperA Refined Mean Field Approximation [](https://hal.inria.fr/hal-01622054/document) by N. Gast and B. Van Houdt, accepted at SIGMETRICS 2018. 
+In particular, it provides a numerical algorithm to compute the constant of the "refined mean field approximation" provided in the paper A Refined Mean Field Approximation [](https://hal.inria.fr/hal-01622054/document) by N. Gast and B. Van Houdt, accepted at SIGMETRICS 2018. 
 
 
 ## Documentation
 
-A density dependent process is a Markov chain that evolve in a sub-domain of $R^d$ are where the transition are given by a set $L$ and a list of rate-functions $\beta_l$. To a system size N is associated a Markov chain whose transitions are (for all $\ell\in L$):
+A density dependent process is a Markov chain that evolves in a sub-domain of $R^d$ are where the transitions are given by a set $L$ and a list of rate-functions $\beta_l$. To a system size N a Markov chain is associated whose transitions are (for all $\ell\in L$):
 
 * $x \mapsto x + \frac 1N \ell$ at rate $\beta_\ell(x)$
 
 The class DDPP can be used to defined a process, via the functions *add_transition(l,beta)* and can then be used to produce :
 
-* A sample trajectory (via simulation : function *simulate(N,time)*
+* A sample trajectory (via simulation : function *simulate(N, time)*
 * The mean-field (or fluid) approximation : function *ode(time)*
 * The refined mean-field approximation (for the steady-state) : function *theoretical_V()*
 
-Most of the functions are documented and their documentation is
-accessible by the "help" command.
+Most of the functions are documented and their documentation is accessible by the "help" command.
 
-Apart from that, the documentation is mostly contained in the examples
-below (from basic to more advanced). 
+Apart from that, the documentation is mostly contained in the examples below (from basic to more advanced). 
 
 ### Computation time
 
