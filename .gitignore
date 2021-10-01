@@ -9,6 +9,8 @@ simulate_JSQ
 tmpFile
 sir_simu
 tmp_N*
+.idea
+/test_example.py
 
 
 
@@ -41,3 +43,5 @@ target/
 
 # mypy
 .mypy_cache/
+
+

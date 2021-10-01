@@ -16,11 +16,14 @@ import numpy.linalg
 import matplotlib.pyplot as plt
 import time as ti
 
+import copy
+
 from numpy import tensordot as tsdot
 from sympy.utilities.lambdify import lambdify
 from sympy import derive_by_array
 import os
 import sys
+
 PATH = os.path.abspath(__file__)
 DIR_PATH = os.path.dirname(PATH)
 sys.path.append(DIR_PATH)
@@ -712,3 +715,53 @@ class DDPP():
         plt.xlabel('Time')
         plt.ylabel('x_{i}')
         plt.show()
+
+
+class HomPP(DDPP):
+    def __init__(self):
+        super().__init__()
+
+    def add_rate_tensors(self, unilateral_transition, pairwise_transitions):
+        r"""
+        Rate tensors must have the form:
+        A[s, s_prime] specifying the unilateral transitions of objects from s to s_prime
+        B[s, s1, s_prime, s1_prime] pairwise transitions of objects from  s to s_prime and s1 to s1_prime
+
+        A has dimensions S x S
+        B has dimensions S x S x S x S
+        """
+
+        self.unilateral_transition = unilateral_transition
+        self.pairwise_transitions = pairwise_transitions
+
+        trans_indices_unilateral = np.nonzero(self.unilateral_transition)
+        nr_unilateral_trans = trans_indices_unilateral[0].shape[0]
+
+        # add unilateral transitions
+        for i in range(nr_unilateral_trans):
+            s, s_prime = trans_indices_unilateral[0][i], trans_indices_unilateral[1][i]
+            _transition_vector = - self.e(s) + self.e(s_prime)
+            # _transition_rate = lambda x: self.unilateral_transition[s, s_prime] * x[s]
+            _transition_rate = eval(
+                'lambda x: {} * x[{}]'.format(self.unilateral_transition[s, s_prime], s)
+            )
+            self.add_transition(_transition_vector, _transition_rate)
+
+        trans_indices_pairwise = np.nonzero(self.pairwise_transitions)
+        nr_pair_trans = trans_indices_pairwise[0].shape[0]
+
+        # add pairwise transitions
+        for i in range(nr_pair_trans):
+            s, s1 = trans_indices_pairwise[0][i], trans_indices_pairwise[1][i]
+            s_prime, s1_prime = trans_indices_pairwise[2][i], trans_indices_pairwise[3][i]
+            _transition_vector = - self.e(s) + self.e(s_prime) - self.e(s1) + self.e(s1_prime)
+            _transition_rate = eval('lambda x: {} * x[{}] * x[{}]'.format(
+                self.pairwise_transitions[s, s1, s_prime, s1_prime], s, s1)
+            )
+            # _transition_rate = lambda x: self.pairwise_transitions[s, s1, s_prime, s1_prime] * x[s] * x[s1]
+            self.add_transition(_transition_vector, copy.deepcopy(_transition_rate))
+
+    def e(self, s):
+        _e = np.zeros(shape=self.unilateral_transition.shape[0])
+        _e[s] = 1
+        return _e
