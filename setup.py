@@ -8,7 +8,7 @@ with open("README.md", 'r') as f:
 
 setup(
    name='rmf_tool',
-   version='',
+   version='1.0',
    description='',
    license="",
    long_description=long_description,
@@ -17,7 +17,7 @@ setup(
    author_email='',
    url="",
    download_url = '',
-   packages=['rmf_tool'],
+   packages=[],
    keywords=[],
    classifiers=[
        "Intended Audience :: Developers",
