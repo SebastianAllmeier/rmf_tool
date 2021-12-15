@@ -181,8 +181,8 @@ for a more detailed discussion on how to use the toolbox.
 ### Advanced examples
 
 * [2-choice model](examples/Example_2choice.ipynb) 
-* [Non stable SIR](Example_nonStableSIR.ipynb)
-* [Bike sharing system](Example_bikeSharingSystem.ipynb)
+* [Non stable SIR](examples/Example_nonStableSIR.ipynb)
+* [Bike sharing system](examples/Example_bikeSharingSystem.ipynb)
 
 More examples can be found in the [example directory](examples).
 
