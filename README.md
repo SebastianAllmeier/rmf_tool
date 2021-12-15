@@ -152,9 +152,9 @@ model.set initial state([1,0])
 To set up a heterogeneous version of the previous SIS model we use the HetPP class of the toolbox. In contrast to the HomPP and DDPP class, the model **can not** be defined independent of the system size, i.e., $n$ and $d$ have to be defined to initialize the model. For instance, to set up a SIS model where objects are almost identical but some recover slower than others, we can use the code:
 
 ```
-import rmf_tool.src.heterogeneous_rmf_tool as hrmf
+import rmf_tool as rmf
 
-model = hrmf.HetPP()
+model = rmf.HetPP()
 
 N, d = 20, 2
 S, I = 0, 1
@@ -181,8 +181,8 @@ for a more detailed discussion on how to use the toolbox.
 ### Advanced examples
 
 * [2-choice model](examples/Example_2choice.ipynb) 
-* [Non stable SIR](examples/Example_nonStableSIR.ipynb)
-* [Bike sharing system](examples/Example_bikeSharingSystem.ipynb)
+* [Non stable SIR](Example_nonStableSIR.ipynb)
+* [Bike sharing system](Example_bikeSharingSystem.ipynb)
 
 More examples can be found in the [example directory](examples).
 
