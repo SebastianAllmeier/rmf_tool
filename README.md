@@ -1,4 +1,4 @@
-# rmf_tool - A library to Compute (Refined) Mean Field Approximations
+# rmftool - A library to Compute (Refined) Mean Field Approximations
 
 
 This python library implements algorithms to simulate and study population processes, to compute their mean-field approximations and refined mean-field approximations for the transient regime and steady-state.
@@ -86,7 +86,7 @@ The simulation of the underlying Markov chain is not optimized and therefore mig
 The following code illustrates how to define a 2-dimensional model using the [DDPP](#density-dependent-population-process) class. It plots the mean-field approximation versus one sample trajectory. It then computes the refined mean-field approximation (in steady-state)
 
 ```
-import src.rmf_tool as rmf
+import rmftool as rmf
 
 ddpp = rmf.DDPP()
 
@@ -111,7 +111,7 @@ With our tool, we define a class called HomPP for which we specify the transitio
 #### Homogeneous Population Process (HomPP)
 
 ```
-import rmf_tool as rmf
+import rmftool as rmf
 
 model = rmf.HomPP()
 
@@ -134,7 +134,7 @@ model.set initial state([1,0])
 Using the class DDPP we can define density dependent population processes directly from their mathematical definition. For the above SIS example, we write: 
 
 ```
-import rmf_tool as rmf
+import rmftool as rmf
 
 model = rmf.DDPP()
 
@@ -152,7 +152,7 @@ model.set initial state([1,0])
 To set up a heterogeneous version of the previous SIS model we use the HetPP class of the toolbox. In contrast to the HomPP and DDPP class, the model **can not** be defined independent of the system size, i.e., $n$ and $d$ have to be defined to initialize the model. For instance, to set up a SIS model where objects are almost identical but some recover slower than others, we can use the code:
 
 ```
-import rmf_tool as rmf
+import rmftool as rmf
 
 model = rmf.HetPP()
 
