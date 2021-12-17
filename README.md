@@ -12,9 +12,9 @@ The tool accepts three model types:
 
 In particular, it provides a numerical algorithm to compute the constant of the "refined mean field approximation" provided in the paper [A Refined Mean Field Approximation](https://hal.inria.fr/hal-01622054/document) by N. Gast and B. Van Houdt, accepted at SIGMETRICS 2018. And a framework to compute heterogeneous mean field approximations [Mean Field and Refined Mean Field Approximations for Heterogeneous Systems: It Works!](https://arxiv.org/pdf/2111.01594.pdf) by N. Gast and S. Allmeier, accepted at SIGMETRICS 2022.
 
-## Installation
+## Installation using pip
 
-```---TBD---```
+```---TBD--- Should be: pip install rmf_tool```
 
 ## Documentation / Usage
 
@@ -184,7 +184,7 @@ for a more detailed discussion on how to use the toolbox.
 * [Non stable SIR](Example_nonStableSIR.ipynb)
 * [Bike sharing system](Example_bikeSharingSystem.ipynb)
 
-More examples can be found in the [example directory](examples).
+More examples can be found in the [example directory](examples) and in the rmf_tool paper repository - [https://gitlab.inria.fr/gast/toolpaper_rmf/-/tree/master/code](https://gitlab.inria.fr/gast/toolpaper_rmf/-/tree/master/code).
 
 ## Dependencies
 
